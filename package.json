@@ -1,6 +1,7 @@
 {
   "name": "3dbattlegame",
   "version": "1.0.0",
+  "type": "module",
   "description": "A simple 3D battle game built with Three.js",
   "scripts": {
     "dev": "vite",
