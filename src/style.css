@@ -1,8 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,800;0,900;1,900&family=Noto+Sans+JP:wght@500;700;900&display=swap");
-
 :root {
   color: #f7f7ff;
-  font-family: "Noto Sans JP", sans-serif;
+  font-family: "Yu Gothic", Meiryo, "Segoe UI", sans-serif;
   background: #080916;
   font-synthesis: none;
 }
@@ -67,7 +65,7 @@ canvas {
   justify-content: flex-start;
   gap: 10px;
   margin-bottom: 5px;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: "Arial Narrow", "Segoe UI", sans-serif;
   font-size: 1.4rem;
   font-style: italic;
   letter-spacing: 0.08em;
@@ -124,7 +122,7 @@ canvas {
   gap: 8px;
   margin-top: 6px;
   color: #a9caff;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: "Arial Narrow", "Segoe UI", sans-serif;
   font-size: 0.66rem;
   letter-spacing: 0.14em;
 }
@@ -163,7 +161,7 @@ canvas {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: "Arial Narrow", "Segoe UI", sans-serif;
   line-height: 1;
   text-shadow: 0 3px 15px #000;
 }
@@ -186,7 +184,7 @@ canvas {
   z-index: 4;
   pointer-events: none;
   color: #fff;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: "Arial Narrow", "Segoe UI", sans-serif;
   font-size: clamp(5rem, 15vw, 10rem);
   font-style: italic;
   font-weight: 900;
@@ -250,7 +248,7 @@ kbd {
   border-radius: 3px;
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: "Arial Narrow", "Segoe UI", sans-serif;
   font-weight: 800;
 }
 
@@ -292,7 +290,7 @@ kbd {
 .eyebrow {
   margin: 0 0 8px;
   color: #63eaff;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: "Arial Narrow", "Segoe UI", sans-serif;
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.28em;
@@ -301,7 +299,7 @@ kbd {
 h1 {
   margin: 0;
   color: white;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: "Arial Narrow", "Segoe UI", sans-serif;
   font-size: clamp(4.8rem, 12vw, 8.8rem);
   font-style: italic;
   font-weight: 900;
@@ -346,7 +344,7 @@ h1 {
   top: 8px;
   right: 10px;
   color: rgba(255, 255, 255, 0.12);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: "Arial Narrow", "Segoe UI", sans-serif;
   font-size: 2rem;
   font-style: italic;
   font-weight: 900;
@@ -354,7 +352,7 @@ h1 {
 
 .instruction-card h2 {
   margin: 0 0 8px;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: "Arial Narrow", "Segoe UI", sans-serif;
   font-size: 1.3rem;
   font-style: italic;
   letter-spacing: 0.06em;
@@ -383,7 +381,7 @@ h1 {
 .tips strong {
   margin-right: 9px;
   color: #f9cf55;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: "Arial Narrow", "Segoe UI", sans-serif;
   letter-spacing: 0.12em;
 }
 
@@ -412,7 +410,7 @@ h1 {
 .enter-hint {
   margin: 10px 0 0 57px;
   color: #7f879f;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: "Arial Narrow", "Segoe UI", sans-serif;
   font-size: 0.65rem;
   letter-spacing: 0.12em;
 }
