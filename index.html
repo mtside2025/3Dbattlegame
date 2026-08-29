@@ -3,55 +3,98 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Neon Blade Arena</title>
+    <meta
+      name="description"
+      content="ブラウザで遊べる、Street Fighter風の3D対戦格闘ゲーム Neon Clash"
+    />
+    <title>Neon Clash — 3D Fighting Game</title>
     <script type="module" src="/src/main.js"></script>
   </head>
   <body>
-    <div id="app">
-      <div class="hud">
-        <div class="status-card">
-          <span class="status-label">PLAYER</span>
-          <div class="bar-track"><div id="player-health" class="bar-fill player-fill"></div></div>
-        </div>
-        <div class="status-card">
-          <span class="status-label">BOSS</span>
-          <div class="bar-track"><div id="enemy-health" class="bar-fill enemy-fill"></div></div>
-        </div>
-      </div>
+    <main id="app">
+      <header class="hud" aria-label="対戦状況">
+        <section class="fighter-status player-status">
+          <div class="fighter-heading">
+            <span class="player-number">1P</span>
+            <strong>KAI</strong>
+          </div>
+          <div class="health-track"><div id="player-health" class="health-fill"></div></div>
+          <div class="energy-row">
+            <span>ENERGY</span>
+            <div class="energy-track"><div id="player-energy" class="energy-fill"></div></div>
+          </div>
+        </section>
 
-      <div id="message" class="message"></div>
+        <div class="round-status">
+          <span>ROUND 1</span>
+          <strong id="timer">60</strong>
+        </div>
 
-      <section id="start-screen" class="overlay">
+        <section class="fighter-status enemy-status">
+          <div class="fighter-heading">
+            <strong>VIPER</strong>
+            <span class="cpu-label">CPU</span>
+          </div>
+          <div class="health-track"><div id="enemy-health" class="health-fill"></div></div>
+          <div class="energy-row">
+            <div class="energy-track"><div id="enemy-energy" class="energy-fill"></div></div>
+            <span>ENERGY</span>
+          </div>
+        </section>
+      </header>
+
+      <div id="announcement" class="announcement" aria-live="assertive"></div>
+      <p id="status-message" class="status-message" aria-live="polite">
+        ENTER またはゲームスタートで対戦開始
+      </p>
+
+      <aside class="quick-controls" aria-label="クイック操作ガイド">
+        <span><kbd>A</kbd><kbd>D</kbd> 移動</span>
+        <span><kbd>W</kbd> ジャンプ</span>
+        <span><kbd>S</kbd> ガード</span>
+        <span><kbd>J</kbd> 弱</span>
+        <span><kbd>K</kbd> 強</span>
+        <span><kbd>L</kbd> 必殺技</span>
+      </aside>
+
+      <section id="overlay" class="overlay">
         <div class="panel">
-          <p class="eyebrow">3D BATTLE GAME</p>
-          <h1>Neon Blade Arena</h1>
-          <p class="lead">
-            光の剣で敵を撃破する、かんたん操作の3Dバトルゲームです。
-            スタート前に操作を確認して、そのまま戦闘へ飛び込みましょう。
+          <p id="overlay-eyebrow" class="eyebrow">3D FIGHTING GAME</p>
+          <h1 id="overlay-title">NEON<br />CLASH</h1>
+          <p id="overlay-copy" class="lead">
+            間合い、ガード、必殺技を使い分けて戦う、1対1の3D格闘ゲーム。
+            60秒以内にCPUファイター「VIPER」を倒せ！
           </p>
 
           <div class="instructions">
-            <div>
-              <h2>操作方法</h2>
+            <div class="instruction-card">
+              <span class="instruction-icon">MOVE</span>
+              <h2>移動・防御</h2>
               <ul>
-                <li><strong>W / A / S / D</strong> または <strong>↑ ← ↓ →</strong>：移動</li>
-                <li><strong>Space</strong>：近距離斬撃</li>
-                <li>敵に近づいてタイミングよく斬ると大ダメージ</li>
+                <li><kbd>A</kbd> / <kbd>D</kbd>：左右移動</li>
+                <li><kbd>W</kbd>：ジャンプ</li>
+                <li><kbd>S</kbd> 長押し：ガード</li>
               </ul>
             </div>
-            <div>
-              <h2>ゲームの流れ</h2>
+            <div class="instruction-card attack-card">
+              <span class="instruction-icon">ATTACK</span>
+              <h2>攻撃</h2>
               <ul>
-                <li>敵のHPを0にすると勝利</li>
-                <li>プレイヤーHPが0になると敗北</li>
-                <li>回り込んで攻撃すると被弾を避けやすい</li>
+                <li><kbd>J</kbd>：弱攻撃</li>
+                <li><kbd>K</kbd>：強攻撃</li>
+                <li><kbd>L</kbd>：必殺技（ENERGY 40）</li>
               </ul>
             </div>
           </div>
 
+          <div class="tips">
+            <strong>FIGHTER'S TIP</strong>
+            攻撃を当ててENERGYをためよう。ガード中も少量のダメージを受けます。
+          </div>
           <button id="start-button" class="start-button">ゲームスタート</button>
+          <p class="enter-hint">ENTER キーでもスタート</p>
         </div>
       </section>
-    </div>
+    </main>
   </body>
 </html>
