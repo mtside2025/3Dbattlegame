@@ -5,8 +5,15 @@ Three.js と Vite で作られた、ブラウザで遊べる Street Fighter 風�
 
 ## 起動方法
 
+リポジトリをZIPでダウンロードして展開し、ルートにある `index.html` をブラウザで開いてください。
+`offline-assets` に Three.js を含む必要なファイルが同梱されているため、インストール、ローカルサーバー、インターネット接続は不要です。
+
+ファイルを個別に移動せず、`index.html` と `offline-assets` の位置関係を維持してください。
+
+## 開発方法
+
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
@@ -32,3 +39,5 @@ npm run dev
 npm test
 npm run build
 ```
+
+`npm run build` は、直接開けるファイルを `offline-assets` に再生成します。
