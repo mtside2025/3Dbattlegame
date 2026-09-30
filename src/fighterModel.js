@@ -167,7 +167,7 @@ function buildHead(neck, look, materials) {
       const strip = part(new THREE.BoxGeometry(0.08, 0.02, 0.5), toon(look.headband, 0.15), { thickness: 0.01 });
       strip.position.z = -0.25;
       ribbon.add(strip);
-      ribbon.rotation.set(0.4, side * 0.3, 0);
+      ribbon.rotation.set(-0.45, side * 0.3, 0);
       ribbons.push(ribbon);
     }
     head.userData.ribbons = ribbons;
@@ -636,13 +636,13 @@ export function animateCloth(model, elapsed, speedRatio) {
   const flutter = 0.35 + speedRatio * 0.6;
   if (scarf) {
     scarf.userData.segments.forEach((segmentGroup, index) => {
-      segmentGroup.rotation.x = (index === 0 ? 0.5 : 0.18) + Math.sin(elapsed * 9 + index * 0.9) * 0.18 * flutter;
+      segmentGroup.rotation.x = (index === 0 ? -0.7 : -0.18) + Math.sin(elapsed * 9 + index * 0.9) * 0.18 * flutter;
       segmentGroup.rotation.y = Math.sin(elapsed * 6 + index) * 0.15 * flutter;
     });
   }
   if (head.userData.ribbons) {
     head.userData.ribbons.forEach((ribbon, index) => {
-      ribbon.rotation.x = 0.3 + Math.sin(elapsed * 10 + index * 1.7) * 0.25 * flutter;
+      ribbon.rotation.x = -0.45 + Math.sin(elapsed * 10 + index * 1.7) * 0.25 * flutter;
     });
   }
   if (cape) {

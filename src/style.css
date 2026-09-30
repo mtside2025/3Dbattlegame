@@ -251,8 +251,9 @@ canvas {
   pointer-events: none;
   color: #fff;
   font-family: "Arial Narrow", "Segoe UI", sans-serif;
-  font-size: clamp(5rem, 15vw, 10rem);
+  font-size: clamp(3.5rem, 11vw, 8rem);
   font-style: italic;
+  white-space: nowrap;
   font-weight: 900;
   letter-spacing: -0.04em;
   opacity: 0;

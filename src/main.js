@@ -81,7 +81,7 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.type = THREE.PCFShadowMap;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.15;
@@ -95,7 +95,8 @@ const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerH
 camera.position.set(0, 9, 13);
 const cameraTarget = new THREE.Vector3(0, 1.3, 0);
 
-const clock = new THREE.Clock();
+const timer = new THREE.Timer();
+let elapsedTime = 0;
 const keys = new Set();
 const projectiles = [];
 const effects = [];
@@ -1077,7 +1078,7 @@ function showOrb(entity, position, color, size, coreColor = "#ffffff") {
   const orb = entity.orb;
   orb.visible = true;
   orb.position.copy(position);
-  const flicker = 1 + Math.sin(clock.elapsedTime * 40) * 0.08;
+  const flicker = 1 + Math.sin(elapsedTime * 40) * 0.08;
   orb.scale.setScalar(size * flicker);
   orb.userData.core.material.color.set(coreColor);
   orb.userData.halo.material.color.set(color);
@@ -1288,7 +1289,7 @@ function updateShield(entity, delta) {
   entity.shield.visible = next > 0.02;
   entity.shieldFlash = Math.max(0, entity.shieldFlash - delta * 4);
   const { parts, baseOpacity, color } = entity.shield.userData;
-  const pulse = 0.85 + Math.sin(clock.elapsedTime * 12) * 0.15;
+  const pulse = 0.85 + Math.sin(elapsedTime * 12) * 0.15;
   parts.forEach((mesh, index) => {
     mesh.material.color.copy(color);
     if (reflectReady) {
@@ -1318,7 +1319,7 @@ function updateCamera(delta) {
     (player.position.z + enemy.position.z) / 2,
   );
   const distance = horizontalDistance(player.position, enemy.position);
-  const desired = tmpVector2.set(mid.x * 0.85, 7.5 + distance * 0.35, mid.z * 0.7 + 10 + distance * 0.55);
+  const desired = tmpVector2.set(mid.x * 0.85, 5.2 + distance * 0.32, mid.z * 0.75 + 7.2 + distance * 0.5);
   camera.position.lerp(desired, 1 - Math.exp(-4 * delta));
   cameraTarget.lerp(mid.setY(1.3), 1 - Math.exp(-6 * delta));
   camera.lookAt(cameraTarget);
@@ -1353,8 +1354,10 @@ function updatePhase(delta) {
 }
 
 function animate() {
-  const delta = Math.min(clock.getDelta(), 0.033);
-  const elapsed = clock.elapsedTime;
+  timer.update();
+  const delta = Math.min(timer.getDelta(), 0.033);
+  const elapsed = timer.getElapsed();
+  elapsedTime = elapsed;
   let simDelta = delta;
   if (hitStop > 0) {
     hitStop = Math.max(0, hitStop - delta);
