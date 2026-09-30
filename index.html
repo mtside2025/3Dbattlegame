@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="ブラウザで遊べる、Street Fighter風の3D対戦格闘ゲーム Neon Clash"
+      content="ブラウザで遊べる、3Dアリーナを自由に動き回るアクション格闘ゲーム Neon Clash"
     />
-    <title>Neon Clash — 3D Fighting Game</title>
+    <title>Neon Clash — 3D Action Fighting Game</title>
     <link rel="stylesheet" href="./offline-assets/style.css" />
     <script src="./offline-assets/game.js" defer></script>
   </head>
@@ -18,6 +18,7 @@
           <div class="fighter-heading">
             <span class="player-number">1P</span>
             <strong>KAI</strong>
+            <span id="player-rounds" class="round-pips" aria-label="取得ラウンド"></span>
           </div>
           <div class="health-track"><div id="player-health" class="health-fill"></div></div>
           <div class="energy-row">
@@ -27,13 +28,15 @@
         </section>
 
         <div class="round-status">
-          <span>ROUND 1</span>
+          <span id="stage-label" class="stage-label">STAGE 1</span>
+          <span id="round-label">ROUND 1</span>
           <strong id="timer">60</strong>
         </div>
 
         <section class="fighter-status enemy-status">
           <div class="fighter-heading">
-            <strong>VIPER</strong>
+            <span id="enemy-rounds" class="round-pips" aria-label="相手の取得ラウンド"></span>
+            <strong id="enemy-name">VIPER</strong>
             <span class="cpu-label">CPU</span>
           </div>
           <div class="health-track"><div id="enemy-health" class="health-fill"></div></div>
@@ -45,55 +48,75 @@
       </header>
 
       <div id="announcement" class="announcement" aria-live="assertive"></div>
+      <div id="special-callout" class="special-callout" aria-live="polite"></div>
       <p id="status-message" class="status-message" aria-live="polite">
-        ENTER またはゲームスタートで対戦開始
+        ENTER またはゲームスタートで開始
       </p>
 
       <aside class="quick-controls" aria-label="クイック操作ガイド">
-        <span><kbd>A</kbd><kbd>D</kbd> 移動</span>
-        <span><kbd>W</kbd> ジャンプ</span>
-        <span><kbd>S</kbd> ガード</span>
-        <span><kbd>J</kbd> 弱</span>
-        <span><kbd>K</kbd> 強</span>
-        <span><kbd>L</kbd> 必殺技</span>
+        <div class="control-row">
+          <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 移動</span>
+          <span><kbd>Space</kbd> ジャンプ</span>
+          <span><kbd>J</kbd> 弱</span>
+          <span><kbd>K</kbd> 強</span>
+          <span><kbd>L</kbd> ガード / 反射</span>
+        </div>
+        <div class="control-row specials">
+          <span data-special="beam"><kbd>U</kbd> ビーム <small>30</small></span>
+          <span data-special="cyclone"><kbd>I</kbd> 旋風脚 <small>35</small></span>
+          <span data-special="dragon"><kbd>O</kbd> 昇竜 <small>40</small></span>
+          <span data-special="meteor"><kbd>P</kbd> メテオ <small>55</small></span>
+        </div>
       </aside>
 
-      <section id="overlay" class="overlay">
+      <section id="overlay" class="overlay" data-mode="title">
         <div class="panel">
-          <p id="overlay-eyebrow" class="eyebrow">3D FIGHTING GAME</p>
+          <p id="overlay-eyebrow" class="eyebrow">3D ACTION FIGHTING</p>
           <h1 id="overlay-title">NEON<br />CLASH</h1>
           <p id="overlay-copy" class="lead">
-            間合い、ガード、必殺技を使い分けて戦う、1対1の3D格闘ゲーム。
-            60秒以内にCPUファイター「VIPER」を倒せ！
+            上下左右・斜めに自由に動ける3Dアリーナで戦うアクション格闘ゲーム。
           </p>
 
-          <div class="instructions">
-            <div class="instruction-card">
-              <span class="instruction-icon">MOVE</span>
-              <h2>移動・防御</h2>
-              <ul>
-                <li><kbd>A</kbd> / <kbd>D</kbd>：左右移動</li>
-                <li><kbd>W</kbd>：ジャンプ</li>
-                <li><kbd>S</kbd> 長押し：ガード</li>
-              </ul>
-            </div>
-            <div class="instruction-card attack-card">
-              <span class="instruction-icon">ATTACK</span>
-              <h2>攻撃</h2>
-              <ul>
-                <li><kbd>J</kbd>：弱攻撃</li>
-                <li><kbd>K</kbd>：強攻撃</li>
-                <li><kbd>L</kbd>：必殺技（ENERGY 40）</li>
-              </ul>
-            </div>
+          <div id="stage-card" class="stage-card" hidden>
+            <div><span>難易度</span><strong id="stage-stars">★★☆☆☆</strong></div>
+            <div><span>ルール</span><strong id="stage-rule">2ラウンド先取</strong></div>
           </div>
 
-          <div class="tips">
-            <strong>FIGHTER'S TIP</strong>
-            攻撃を当ててENERGYをためよう。ガード中も少量のダメージを受けます。
+          <div id="title-extras">
+            <div class="instructions">
+              <div class="instruction-card">
+                <span class="instruction-icon">MOVE</span>
+                <h2>移動・防御</h2>
+                <ul>
+                  <li><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / 矢印：奥・手前・左右・斜めに移動</li>
+                  <li><kbd>Space</kbd>：ジャンプ（ビームを飛び越えられる）</li>
+                  <li><kbd>L</kbd> 長押し：シールドでガード</li>
+                  <li>ビーム直前に <kbd>L</kbd>：<b>ビーム反射</b></li>
+                </ul>
+              </div>
+              <div class="instruction-card attack-card">
+                <span class="instruction-icon">ATTACK</span>
+                <h2>攻撃・必殺技</h2>
+                <ul>
+                  <li><kbd>J</kbd>：ジャブ　<kbd>K</kbd>：ハイキック</li>
+                  <li><kbd>U</kbd>：ネオンビーム（ENERGY 30）</li>
+                  <li><kbd>I</kbd>：サイクロンキック（35）</li>
+                  <li><kbd>O</kbd>：ライジングドラゴン（40）</li>
+                  <li><kbd>P</kbd>：メテオダイブ（55）</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="tips">
+              <strong>RULE</strong>
+              1試合は複数ラウンド制。先に規定ラウンド数を取った方が勝利。ステージを進むごとに敵は強くなり、最後にはボスが待ち受ける。
+            </div>
           </div>
-          <button id="start-button" class="start-button">ゲームスタート</button>
-          <p class="enter-hint">ENTER キーでもスタート</p>
+          <div class="button-row">
+            <button id="start-button" class="start-button" type="button">ゲームスタート</button>
+            <button id="secondary-button" class="secondary-button" type="button" hidden></button>
+          </div>
+          <p class="enter-hint">ENTER キーでも決定</p>
         </div>
       </section>
     </main>

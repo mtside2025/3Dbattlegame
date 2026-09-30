@@ -172,6 +172,72 @@ canvas {
   letter-spacing: 0.16em;
 }
 
+.round-status .stage-label {
+  margin-bottom: 3px;
+  padding: 1px 8px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffd84a;
+  font-weight: 800;
+}
+
+.round-pips {
+  display: inline-flex;
+  gap: 5px;
+}
+
+.pip {
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  border-radius: 50%;
+  background: rgba(4, 6, 17, 0.7);
+}
+
+.pip.won {
+  border-color: #fff4b0;
+  background: radial-gradient(circle, #fff7c7, #ffb82e);
+  box-shadow: 0 0 10px #ffc94a;
+}
+
+.special-callout {
+  position: absolute;
+  top: 24%;
+  z-index: 4;
+  max-width: 46vw;
+  padding: 8px 22px;
+  pointer-events: none;
+  border-left: 6px solid var(--callout-color, #61efff);
+  background: linear-gradient(90deg, rgba(4, 6, 17, 0.88), rgba(4, 6, 17, 0));
+  color: #fff;
+  font-family: "Arial Narrow", "Yu Gothic", sans-serif;
+  font-size: clamp(1.2rem, 3vw, 2.2rem);
+  font-style: italic;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  opacity: 0;
+  text-shadow: 0 0 16px var(--callout-color, #61efff), 0 3px 0 #000;
+  transition: opacity 120ms ease, transform 160ms ease;
+}
+
+.special-callout.player {
+  left: 0;
+  transform: translateX(-30px) skew(-8deg);
+}
+
+.special-callout.enemy {
+  right: 0;
+  border-right: 6px solid var(--callout-color, #ff6a82);
+  border-left: 0;
+  background: linear-gradient(270deg, rgba(4, 6, 17, 0.88), rgba(4, 6, 17, 0));
+  text-align: right;
+  transform: translateX(30px) skew(-8deg);
+}
+
+.special-callout.visible {
+  opacity: 1;
+  transform: translateX(0) skew(-8deg);
+}
+
 .round-status strong {
   font-size: 3rem;
   font-style: italic;
@@ -205,7 +271,7 @@ canvas {
 
 .status-message {
   position: absolute;
-  bottom: 54px;
+  bottom: 96px;
   left: 50%;
   z-index: 3;
   margin: 0;
@@ -224,10 +290,33 @@ canvas {
   right: 18px;
   bottom: 18px;
   z-index: 3;
-  display: flex;
-  gap: 7px;
+  display: grid;
+  justify-items: end;
+  gap: 6px;
   color: #d0d4e6;
   font-size: 0.64rem;
+}
+
+.control-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.quick-controls .specials span {
+  opacity: 0.5;
+  transition: opacity 150ms ease, border-color 150ms ease;
+}
+
+.quick-controls .specials span.ready {
+  border-color: #61efff;
+  box-shadow: 0 0 10px rgba(97, 239, 255, 0.35);
+  opacity: 1;
+}
+
+.quick-controls small {
+  color: #8fe9ff;
 }
 
 .quick-controls span {
@@ -407,6 +496,70 @@ h1 {
   transform: skew(-8deg) translateY(-2px);
 }
 
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+
+.secondary-button {
+  margin-top: 20px;
+  padding: 13px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.06);
+  color: #dfe4f7;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  transform: skew(-8deg);
+}
+
+.secondary-button:hover,
+.secondary-button:focus-visible {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.stage-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.stage-card div {
+  display: grid;
+  gap: 4px;
+  min-width: 190px;
+  padding: 12px 18px;
+  border-top: 3px solid #ffd84a;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.stage-card span {
+  color: #aeb5cc;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+}
+
+.stage-card strong {
+  color: #ffd84a;
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+}
+
+.overlay[data-mode="result"],
+.overlay[data-mode="stage"] {
+  background:
+    linear-gradient(110deg, rgba(5, 8, 24, 0.9) 0 45%, rgba(5, 8, 24, 0.45) 75%, rgba(7, 5, 18, 0.6)),
+    repeating-linear-gradient(135deg, transparent 0 10px, rgba(255, 255, 255, 0.02) 10px 11px);
+}
+
 .enter-hint {
   margin: 10px 0 0 57px;
   color: #7f879f;
@@ -456,13 +609,15 @@ h1 {
   .quick-controls {
     right: 8px;
     bottom: 8px;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    max-width: 250px;
+    max-width: 300px;
+  }
+
+  .special-callout {
+    max-width: 80vw;
   }
 
   .status-message {
-    bottom: 78px;
+    bottom: 130px;
     width: calc(100% - 24px);
     text-align: center;
   }
