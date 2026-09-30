@@ -1,5 +1,6 @@
 import "./style.css";
 import * as THREE from "three";
+import { SVGRenderer } from "three/examples/jsm/renderers/SVGRenderer.js";
 import {
   ATTACKS,
   GUARD_ARC,
@@ -21,7 +22,14 @@ import {
   startAttack,
 } from "./combat.js";
 import { PLAYER_LOOK, STAGES, difficultyStars, getStage, isFinalStage } from "./roster.js";
-import { animateCloth, applyPose, computePose, createFighterModel, disposeModel } from "./fighterModel.js";
+import {
+  animateCloth,
+  applyPose,
+  computePose,
+  createFighterModel,
+  disposeModel,
+  useSimpleMaterials,
+} from "./fighterModel.js";
 
 const ARENA_RADIUS = 9;
 const GRAVITY = 24;
@@ -77,14 +85,33 @@ const callout = $("#special-callout");
 const statusMessage = $("#status-message");
 const specialChips = [...document.querySelectorAll("[data-special]")];
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+/**
+ * Uses WebGL when possible. School and office PCs often have WebGL disabled by
+ * policy or a blocked GPU driver, so fall back to the software SVG renderer
+ * instead of crashing before the start button is wired up.
+ */
+function createRenderer() {
+  try {
+    const webgl = new THREE.WebGLRenderer({ antialias: true });
+    webgl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    webgl.shadowMap.enabled = true;
+    webgl.shadowMap.type = THREE.PCFShadowMap;
+    webgl.outputColorSpace = THREE.SRGBColorSpace;
+    webgl.toneMapping = THREE.ACESFilmicToneMapping;
+    webgl.toneMappingExposure = 1.15;
+    return { renderer: webgl, softwareRendering: false };
+  } catch (error) {
+    console.warn("WebGL is unavailable; using the software renderer instead.", error);
+    const svg = new SVGRenderer();
+    svg.setQuality("low");
+    svg.domElement.classList.add("software-renderer");
+    return { renderer: svg, softwareRendering: true };
+  }
+}
+
+const { renderer, softwareRendering } = createRenderer();
+useSimpleMaterials(softwareRendering);
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFShadowMap;
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.15;
 app.prepend(renderer.domElement);
 
 const scene = new THREE.Scene();
@@ -116,6 +143,13 @@ scene.add(leftGlow);
 const rightGlow = new THREE.PointLight("#ff315d", 60, 26, 2);
 rightGlow.position.set(10, 5, -2);
 scene.add(rightGlow);
+if (softwareRendering) {
+  // The SVG renderer ignores hemisphere lights and uses unphysical intensities.
+  scene.add(new THREE.AmbientLight("#8c94c8", 0.55));
+  keyLight.intensity = 0.9;
+  leftGlow.intensity = 0.35;
+  rightGlow.intensity = 0.35;
+}
 
 const shared = {
   ring: new THREE.RingGeometry(0.55, 1, 40),
@@ -1455,3 +1489,4 @@ secondaryButton.addEventListener("click", () => secondaryAction?.());
 
 showTitle();
 animate();
+document.documentElement.dataset.game = "ready";

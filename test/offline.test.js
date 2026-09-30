@@ -21,3 +21,10 @@ test("the game entry point uses only bundled offline assets", async () => {
   assert.doesNotMatch(`${html}\n${style}`, /https?:\/\//);
   assert.ok(gameStats.isFile() && gameStats.size > 0, `missing offline bundle under ${projectRoot}`);
 });
+
+test("the game still starts when WebGL is unavailable", async () => {
+  const [html, game] = await Promise.all([readFile(indexPath, "utf8"), readFile(gamePath, "utf8")]);
+
+  assert.match(game, /software-renderer/, "offline bundle should include the SVG renderer fallback");
+  assert.match(html, /data-game/, "index.html should explain when offline-assets/game.js fails to load");
+});

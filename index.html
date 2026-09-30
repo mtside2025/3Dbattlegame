@@ -120,5 +120,17 @@
         </div>
       </section>
     </main>
+    <script>
+      // game.js が読み込めなかった場合（ZIPを展開せずに開いた、offline-assets フォルダが無い等）に原因を表示する
+      window.addEventListener("load", function () {
+        if (document.documentElement.getAttribute("data-game") === "ready") return;
+        var copy = document.getElementById("overlay-copy");
+        copy.className += " load-error";
+        copy.textContent =
+          "ゲームのファイル（offline-assets/game.js）を読み込めませんでした。" +
+          "ダウンロードしたZIPファイルは右クリック →「すべて展開」で展開し、展開したフォルダの中の index.html を開いてください。" +
+          "index.html と offline-assets フォルダは同じ場所に置いたままにしてください。";
+      });
+    </script>
   </body>
 </html>

@@ -12,7 +12,23 @@ const toonGradient = (() => {
 
 const outlineMaterial = new THREE.MeshBasicMaterial({ color: "#07060d", side: THREE.BackSide });
 
+let simpleMaterials = false;
+
+/**
+ * Switches fighter models to materials the software (SVG) renderer can draw.
+ * Used when WebGL is unavailable, e.g. when it is disabled by a school policy.
+ */
+export function useSimpleMaterials(enabled) {
+  simpleMaterials = enabled;
+}
+
 function toon(color, emissiveIntensity = 0) {
+  if (simpleMaterials) {
+    return new THREE.MeshLambertMaterial({
+      color,
+      emissive: new THREE.Color(color).multiplyScalar(emissiveIntensity * 0.5),
+    });
+  }
   return new THREE.MeshToonMaterial({
     color,
     gradientMap: toonGradient,
@@ -29,7 +45,7 @@ function glow(color, opacity = 1) {
 function part(geometry, material, { outline = true, thickness = 0.035, shadow = true } = {}) {
   const mesh = new THREE.Mesh(geometry, material);
   mesh.castShadow = shadow;
-  if (outline) {
+  if (outline && !simpleMaterials) {
     geometry.computeBoundingSphere();
     const radius = Math.max(geometry.boundingSphere.radius, 0.05);
     const hull = new THREE.Mesh(geometry, outlineMaterial);
