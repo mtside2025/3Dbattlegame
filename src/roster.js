@@ -1,0 +1,147 @@
+export const PLAYER_LOOK = Object.freeze({
+  name: "KAI",
+  suit: "#1d5bff",
+  suitDark: "#10244f",
+  accent: "#61efff",
+  skin: "#e2a47c",
+  hair: "#18203b",
+  hairStyle: "spiky",
+  headband: "#ff3a63",
+  scarf: "#ff3a63",
+  eyes: "#1a1f33",
+  scale: 1,
+});
+
+// Stages are fought in order. Each entry is a stronger opponent than the previous one.
+// ai.reaction: seconds between decisions (lower = faster)
+// ai.aggression / guard / reflect / specialRate: probabilities (0..1)
+export const STAGES = Object.freeze([
+  Object.freeze({
+    id: "viper",
+    name: "VIPER",
+    title: "紅蓮の拳士",
+    description: "素直な攻めの拳士。まずはガードと間合いを覚えよう。",
+    roundsToWin: 2,
+    maxHealth: 100,
+    damageScale: 0.8,
+    energyRegen: 3,
+    moveSpeed: 3.1,
+    specials: ["beam", "dragon"],
+    ai: Object.freeze({ reaction: 0.6, aggression: 0.35, guard: 0.2, reflect: 0, specialRate: 0.25, strafe: 0.25 }),
+    arena: Object.freeze({ sky: "#0b0c1f", fog: "#1a1430", left: "#247cff", right: "#ff315d" }),
+    look: Object.freeze({
+      name: "VIPER",
+      suit: "#b5163e",
+      suitDark: "#4a0a1c",
+      accent: "#ffcf52",
+      skin: "#c98368",
+      hair: "#2a0d14",
+      hairStyle: "mohawk",
+      headband: "#ffcf52",
+      scarf: null,
+      eyes: "#240a10",
+      scale: 1,
+    }),
+  }),
+  Object.freeze({
+    id: "raijin",
+    name: "RAIJIN",
+    title: "雷迅の闘士",
+    description: "雷のように素早い闘士。回転蹴りとビームに注意。",
+    roundsToWin: 2,
+    maxHealth: 110,
+    damageScale: 0.95,
+    energyRegen: 4,
+    moveSpeed: 3.7,
+    specials: ["beam", "cyclone", "dragon"],
+    ai: Object.freeze({ reaction: 0.45, aggression: 0.5, guard: 0.4, reflect: 0.15, specialRate: 0.35, strafe: 0.45 }),
+    arena: Object.freeze({ sky: "#0a1420", fog: "#10263a", left: "#35ffd2", right: "#ffd84a" }),
+    look: Object.freeze({
+      name: "RAIJIN",
+      suit: "#e8b21c",
+      suitDark: "#3c2a06",
+      accent: "#7ef9ff",
+      skin: "#d9a07a",
+      hair: "#f7f3d8",
+      hairStyle: "spiky",
+      headband: "#2e8bff",
+      scarf: "#2e8bff",
+      eyes: "#1b2440",
+      horns: true,
+      scale: 1,
+    }),
+  }),
+  Object.freeze({
+    id: "kage",
+    name: "KAGE",
+    title: "影の忍",
+    description: "ビームを跳ね返してくる忍。反射を狙ってタイミングを読め。",
+    roundsToWin: 2,
+    maxHealth: 120,
+    damageScale: 1.05,
+    energyRegen: 5,
+    moveSpeed: 4.3,
+    specials: ["beam", "cyclone", "dragon", "meteor"],
+    ai: Object.freeze({ reaction: 0.32, aggression: 0.62, guard: 0.55, reflect: 0.35, specialRate: 0.45, strafe: 0.6 }),
+    arena: Object.freeze({ sky: "#0d0818", fog: "#1d1030", left: "#9a5bff", right: "#35ffb2" }),
+    look: Object.freeze({
+      name: "KAGE",
+      suit: "#3a2a66",
+      suitDark: "#141024",
+      accent: "#35ffb2",
+      skin: "#caa088",
+      hair: "#141024",
+      hairStyle: "hood",
+      headband: null,
+      scarf: "#8a2be2",
+      eyes: "#35ffb2",
+      mask: true,
+      scale: 1,
+    }),
+  }),
+  Object.freeze({
+    id: "omega",
+    name: "ZERO Ω",
+    title: "終焉の魔王",
+    description: "最後の敵。固有必殺技「オメガ・ノヴァ」は扇状の闇ビーム。反射かジャンプで切り抜けろ！",
+    boss: true,
+    signature: "nova",
+    roundsToWin: 3,
+    maxHealth: 150,
+    damageScale: 1.15,
+    energyRegen: 6,
+    moveSpeed: 4.4,
+    specials: ["nova", "beam", "cyclone", "dragon", "meteor"],
+    ai: Object.freeze({ reaction: 0.24, aggression: 0.7, guard: 0.62, reflect: 0.5, specialRate: 0.55, strafe: 0.55 }),
+    arena: Object.freeze({ sky: "#14040a", fog: "#2a0710", left: "#ff2a2a", right: "#ffb02e" }),
+    look: Object.freeze({
+      name: "ZERO Ω",
+      suit: "#1b1720",
+      suitDark: "#07060a",
+      accent: "#ffb02e",
+      skin: "#8d7f9a",
+      hair: "#f1f1f1",
+      hairStyle: "long",
+      headband: null,
+      scarf: null,
+      eyes: "#ff2a2a",
+      glowEyes: true,
+      horns: true,
+      cape: "#6d0a1a",
+      armor: "#d4a437",
+      scale: 1.25,
+    }),
+  }),
+]);
+
+export function getStage(index) {
+  return STAGES[Math.min(Math.max(index, 0), STAGES.length - 1)];
+}
+
+export function isFinalStage(index) {
+  return index >= STAGES.length - 1;
+}
+
+export function difficultyStars(index) {
+  return Math.min(5, index + 2);
+}
